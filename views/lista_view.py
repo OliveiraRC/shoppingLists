@@ -69,16 +69,21 @@ class ListaView(Screen):
         self.controller_callback('load_itens', lista_id)
     
     def _add_item(self):
-        """Adiciona item (chama Controller)"""
+        """✅ CORRIGIDO - Adiciona item corretamente"""
         nome = self.input_nome.text.strip()
         try:
             qtd = float(self.input_qtd.text or 0)
             preco = float(self.input_preco.text or 0)
+            print(f"➕ Tentando adicionar: {nome}, {qtd}, R${preco}")  # DEBUG
+
             if nome and qtd > 0 and preco > 0 and self.lista_id:
                 self.controller_callback('add_item', self.lista_id, nome, qtd, preco)
+                # Limpa campos
                 self.input_nome.text = self.input_qtd.text = self.input_preco.text = ""
-        except ValueError:
-            pass
+            else:
+                print("❌ Validação falhou")
+        except ValueError as e:
+            print(f"❌ Erro nos dados: {e}")
     
     def _apply_filter(self):
         """Aplica filtro de itens"""
@@ -91,38 +96,52 @@ class ListaView(Screen):
             self.controller_callback('filter_itens', self.lista_id, "")
     
     def update_itens(self, itens_data: List, total: float):
-        """Atualiza lista de itens (Controller chama)"""
+        """✅ CORRIGIDO - Atualiza lista de itens na tela"""
+        print(f"🔄 Atualizando {len(itens_data)} itens, total R$ {total:.2f}")  # DEBUG
         self.container_itens.clear_widgets()
-        
+
         if not itens_data:
-            self.container_itens.add_widget(MDLabel(text="Nenhum item", halign="center"))
+            empty_label = MDLabel(
+                text="📝 Adicione o primeiro item!", 
+                halign="center", size_hint_y=None, height=50
+            )
+            self.container_itens.add_widget(empty_label)
             self.lbl_total.text = "Total comprados: R$ 0,00"
             return
-        
+
         for item_id, nome, qtd, preco, comprado in itens_data:
             self._create_item_row(item_id, nome, qtd, preco, comprado)
-        
+
         self.lbl_total.text = f"Total comprados: R$ {total:.2f}"
-    
-    def _create_item_row(self, item_id: int, nome: str, qtd: float, preco: float, comprado: int):
-        """Linha individual do item"""
-        linha = MDBoxLayout(size_hint_y=None, height=55, spacing=10)
         
+    def _create_item_row(self, item_id: int, nome: str, qtd: float, preco: float, comprado: int):
+        """✅ CORRIGIDO - Linha de item funcional"""
+        linha = MDBoxLayout(size_hint_y=None, height=55, spacing=10)
+
+        # Checkbox
         chk = MDCheckbox(active=bool(comprado))
         chk.bind(on_release=lambda x: self.controller_callback('toggle_item', item_id, x.active))
-        
+
+        # Info do item
         subtotal = qtd * preco if comprado else 0
-        texto = f"{nome} | {qtd:.1f}x R${preco:.2f}"
-        texto += f" = R${subtotal:.2f}" if comprado else " (pendente)"
-        
-        info = MDLabel(text=texto)
+        texto = f"{nome} | {qtd:.1f} x R${preco:.2f}"
+        if comprado:
+            texto += f" = R${subtotal:.2f}"
+        else:
+            texto += " (pendente)"
+
+        info_layout = MDBoxLayout(orientation='vertical', size_hint_x=0.75)
+        info_layout.add_widget(MDLabel(text=texto, valign='middle'))
+
+        # Delete
         btn_delete = MDIconButton(
-            icon="trash-can-outline", icon_color="red",
+            icon="trash-can-outline", 
+            icon_color=(1, 0, 0, 1),
             on_release=lambda x: self.controller_callback('confirm_delete_item', item_id)
         )
-        
+
         linha.add_widget(chk)
-        linha.add_widget(MDBoxLayout(orientation='vertical', size_hint_x=0.75, children=[info]))
+        linha.add_widget(info_layout)
         linha.add_widget(btn_delete)
         self.container_itens.add_widget(linha)
     

@@ -7,11 +7,13 @@ from models.database import db
 
 class ListaController:
     def __init__(self, lista_view, home_view):
-        self.lista_view = lista_view
-        self.home_view = home_view
+        self.lista_view = lista_view      # ✅ REFERÊNCIA OBRIGATÓRIA
+        self.home_view = home_view        # ✅ REFERÊNCIA OBRIGATÓRIA
+        self.lista_view.controller = self  # ✅ INJEÇÃO INVERSA
     
     def handle_event(self, action: str, *args):
         """Dispatcher de eventos da tela de itens"""
+        print(f"📋 ListaController evento: {action}")  # DEBUG
         handlers = {
             'load_itens': self.load_itens,
             'add_item': self.add_item,
@@ -20,7 +22,8 @@ class ListaController:
             'confirm_delete_item': self.confirm_delete_item,
             'go_home': self.go_home
         }
-        handlers[action](*args)
+        if action in handlers:
+            handlers[action](*args)
     
     def show_lista(self, lista_id: int):
         """Carrega itens da lista específica"""
@@ -45,8 +48,10 @@ class ListaController:
         self.lista_view.update_itens(itens, total)
     
     def add_item(self, lista_id: int, nome: str, qtd: float, preco: float):
-        """Adiciona novo item"""
+        """✅ CORRIGIDO - Adiciona e atualiza tela"""
+        print(f"💾 Salvando item na lista {lista_id}: {nome}")
         db.create_item(lista_id, nome, qtd, preco)
+        # ✅ CHAMA ATUALIZAÇÃO IMEDIATA
         self._refresh_itens(lista_id, "")
     
     def toggle_item(self, item_id: int, comprado: bool):

@@ -18,31 +18,27 @@ class MVCApp(MDApp):
         
         sm = ScreenManager()
         
-        # ✅ CORRIGIDO: Controllers primeiro
-        self.lista_controller = ListaController(None, None)  # Temporário
-        self.home_controller = HomeController(None, self.lista_controller)
-        
-        # ✅ CORRIGIDO: Views com callbacks VINCULADOS aos controllers
+        # ✅ 1. CRIAR VIEWS PRIMEIRO
         home_view = HomeView(lambda action, *args: self.home_controller.handle_event(action, *args))
         lista_view = ListaView(lambda action, *args: self.lista_controller.handle_event(action, *args))
         
-        # Injeta ScreenManager e controllers
+        # ✅ 2. INJETAR ScreenManager
         home_view.sm = sm
         lista_view.sm = sm
-        self.home_controller.view = home_view
-        self.lista_controller.lista_view = lista_view
-        self.lista_controller.home_view = home_view
+        
+        # ✅ 3. CRIAR CONTROLLERS COM VIEWS PRONTAS
+        self.lista_controller = ListaController(lista_view, home_view)
+        self.home_controller = HomeController(home_view, self.lista_controller)
         
         sm.add_widget(home_view)
         sm.add_widget(lista_view)
         sm.current = 'home'
-        
         return sm
-    
-    def _create_controller_callback(self, action: str, *args):
-        """Callback genérico para views chamarem controllers"""
-        # Este método será chamado pelas views
-        pass  # Controllers já injetados nas views
+        
+        def _create_controller_callback(self, action: str, *args):
+            """Callback genérico para views chamarem controllers"""
+            # Este método será chamado pelas views
+            pass  # Controllers já injetados nas views
 
 
 if __name__ == '__main__':
