@@ -17,6 +17,7 @@ class HomeController:
     
     def handle_event(self, action: str, *args):
         """Dispatcher central de eventos"""
+        print(f"🔥 EVENTO: {action}, args: {args}")  # DEBUG
         handlers = {
             'create_lista': self.create_lista,
             'filter_lists': self.filter_lists,
@@ -37,7 +38,8 @@ class HomeController:
     
     def refresh_listas(self, filtro: str = ""):
         listas = db.get_listas(filtro)
-        self.view.update_listas(listas, self.selecionadas)
+        if self.view:
+            self.view.update_listas(listas, self.selecionadas)
     
     def export_selected(self):
         if self.selecionadas:

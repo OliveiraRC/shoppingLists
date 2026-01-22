@@ -16,6 +16,7 @@ class ListaView(Screen):
     def __init__(self, controller_callback: Callable, **kwargs):
         super().__init__(**kwargs)
         self.name = 'lista'
+        self.sm = None  # ✅ ADICIONEI ESTA LINHA
         self.controller_callback = controller_callback
         self.lista_id = None
         self._build_ui()

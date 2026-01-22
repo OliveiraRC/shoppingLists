@@ -19,6 +19,7 @@ class HomeView(Screen):
     def __init__(self, controller_callback: Callable, **kwargs):
         super().__init__(**kwargs)
         self.name = 'home'
+        self.sm = None  # ✅ ADICIONEI ESTA LINHA
         self.controller_callback = controller_callback  # Referência ao Controller
         self.selecionadas = set()
         self._build_ui()
@@ -35,11 +36,12 @@ class HomeView(Screen):
         filtro_layout = MDBoxLayout(size_hint_y=None, height=60, spacing=10)
         self.input_filtro = MDTextField(
             hint_text="🔍 Filtrar listas...", 
-            on_text_validate=lambda x: self.controller_callback('filter_lists', self.input_filtro.text)
+            on_text_validate=lambda x: self.controller_callback('filter_lists', self.input_filtro.text.strip())
         )
         btn_limpar = MDIconButton(
-            icon="close-circle", on_release=lambda x: self._clear_filter()
-        )
+            icon="close-circle", 
+            on_release=lambda x: self.controller_callback('filter_lists', "")
+)
         filtro_layout.add_widget(self.input_filtro)
         filtro_layout.add_widget(btn_limpar)
         layout.add_widget(filtro_layout)
@@ -70,6 +72,7 @@ class HomeView(Screen):
         """Callback para Controller criar lista"""
         nome = self.input_nova.text.strip()
         if nome:
+            # ✅ CORRIGIDO: Chama o controller_callback corretamente
             self.controller_callback('create_lista', nome)
             self.input_nova.text = ""
     
