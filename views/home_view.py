@@ -125,6 +125,11 @@ class HomeView(Screen):
             icon="trash-can-outline", icon_color=(1, 0, 0, 1), size_hint_x=None, width=48,
             on_release=lambda x: self.controller_callback('confirm_delete_lista', lista_id)
         )
+    
+    # ✅ CORRIGIDO: Clique no CARD (não nos botões)
+        def on_card_release(instance):
+            print(f"🖱️ Clicou na lista: {nome} (ID: {lista_id})")  # DEBUG
+            self.controller_callback('open_lista', lista_id)
         
         # Monta card
         layout.add_widget(checkbox)
@@ -134,8 +139,9 @@ class HomeView(Screen):
         layout.add_widget(btn_pdf)
         layout.add_widget(btn_delete)
         card.add_widget(layout)
-        card.bind(on_release=lambda x: self.controller_callback('open_lista', lista_id))
+        # card.bind(on_release=lambda x: self.controller_callback('open_lista', lista_id))
         
+        card.bind(on_release=on_card_release)
         self.container_listas.add_widget(card)
     
     def _toggle_selecao(self, lista_id: int, ativo: bool):

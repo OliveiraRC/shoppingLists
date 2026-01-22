@@ -144,4 +144,7 @@ class HomeController:
         self.view.show_confirm_dialog("Excluir Lista?", "Todos os itens serão removidos.", on_confirm)
     
     def open_lista(self, lista_id: int):
+        """Navega para tela de itens"""
+        print(f"🚀 Abrindo lista ID: {lista_id}")  # DEBUG
         self.lista_controller.show_lista(lista_id)
+        self.view.sm.current = 'lista'  # ✅ MUDA PARA TELA DE ITENS

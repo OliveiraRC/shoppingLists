@@ -24,7 +24,11 @@ class ListaController:
     
     def show_lista(self, lista_id: int):
         """Carrega itens da lista específica"""
+        print(f"📋 ListaController: Carregando lista {lista_id}")  # DEBUG
         self.lista_view.show_lista(lista_id)
+        self.lista_view.lista_id = lista_id  # ✅ ARMAZENA ID ATUAL
+        self.lista_view.sm.current = 'lista'  # ✅ ATIVA TELA
+        self.load_itens(lista_id)  # ✅ CARREGA ITENS
     
     def load_itens(self, lista_id: int):
         """Carrega todos itens da lista"""
