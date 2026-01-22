@@ -1,0 +1,23 @@
+# ========================================
+# REQUIREMENTS - Lista de Compras App
+# TechList Solutions - KivyMD Project
+# ========================================
+
+# 🔧 DEPENDÊNCIAS OBRIGATÓRIAS
+kivymd>=1.1.0
+kivy>=2.1.0
+
+# 🗄️ BANCO DE DADOS (embutido)
+# sqlite3 (vem com Python, não precisa instalar)
+
+# 📊 EXPORTAÇÃO EXCEL (opcional)
+openpyxl>=3.1.0
+
+# 📄 EXPORTAÇÃO PDF (opcional)  
+reportlab>=4.0.0
+
+# 📁 FILECHOOSER multiplataforma (opcional, recomendado)
+plyer>=2.1.0
+
+# 🐍 PYTHON VERSÃO MÍNIMA
+# Python 3.8+

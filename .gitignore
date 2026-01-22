@@ -1,0 +1,142 @@
+# ========================================
+# .gitignore para Lista de Compras KivyMD
+# TechList Solutions - Python/KivyMD Project
+# ========================================
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# KivyMD / Kivy builds e caches
+build/
+dist/
+*.apk
+*.aab
+.kivy/
+.cache/
+kivy/__pycache__/
+
+# Banco de dados SQLite (DADOS DO USUÁRIO)
+*.db
+*.db-journal
+*.db-wal
+compras.db
+compras.db-shm
+compras.db-wal
+
+# Arquivos gerados pelo app (exportações)
+*.xlsx
+*.xls
+*.pdf
+lista_compras_*.xlsx
+lista_compras_*.pdf
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDEs e Editores
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# VSCode específicos
+.vscode/settings.json
+.vscode/tasks.json
+.vscode/launch.json
+.vscode/extensions.json
+
+# PyCharm/IDEs
+.idea/
+*.iml
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# Dependências Python
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Arquivos de distribuição
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+
+# PyInstaller
+/*.spec
+/build/
+/dist/
+
+# mypy, flake8, black, isort
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pytest_cache/
+.coverage
+htmlcov/
+.ruff_cache/
+.black_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb_checkpoints
+
+# pyenv
+.python-version
+
+# VS Code
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+
+# Spyder
+.spyproject/
+.spyderproject
+
+# OS específicos
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Arquivos temporários
+*.tmp
+*.temp
+temp/
+
+# Arquivos do sistema
+Thumbs.db
+thumbs.db
+desktop.ini
+$RECYCLE.BIN/
+
+# Arquivos de desenvolvimento local
+.DS_Store
+.env
+.local/
+
+# Docker
+.dockerignore
+
+# KivyMD APK builds
+bin/
+obj/
+ ListaComprasApp-*.apk
