@@ -2,6 +2,12 @@
 LISTA DE COMPRAS - ARQUITETURA MVC CORRIGIDA
 TechList Solutions - KivyMD 1.2.0
 """
+
+try:
+    from kivy.utils import platform
+except:
+    pass
+
 from kivy.uix.screenmanager import ScreenManager
 from kivymd.app import MDApp
 

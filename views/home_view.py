@@ -3,6 +3,7 @@ VIEW HOME - Camada de Apresentação (MVC)
 Apenas UI + callbacks para Controller
 Sem lógica de negócio, sem banco
 """
+
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivymd.uix.button import MDRaisedButton, MDFlatButton, MDIconButton
 from kivymd.uix.label import MDLabel
@@ -14,6 +15,14 @@ from kivymd.uix.selectioncontrol import MDCheckbox
 from kivy.uix.screenmanager import Screen
 from typing import Callable, List
 
+# ✅ IMPORTS ANDROID (só funcionam no APK, desktop ignora)
+try:
+    from kivy.utils import platform
+    from android.permissions import request_permissions, Permission
+    ANDROID_AVAILABLE = True
+except ImportError:
+    ANDROID_AVAILABLE = False
+    platform = "desktop"  # Mock para desktop
 
 class HomeView(Screen):
     def __init__(self, controller_callback: Callable, **kwargs):
@@ -22,6 +31,15 @@ class HomeView(Screen):
         self.sm = None  # ✅ ADICIONEI ESTA LINHA
         self.controller_callback = controller_callback  # Referência ao Controller
         self.selecionadas = set()
+        
+        # ✅ PERMISSÕES ANDROID (só executa no APK)
+        if ANDROID_AVAILABLE and platform == "android":
+            request_permissions([
+                Permission.WRITE_EXTERNAL_STORAGE,
+                Permission.READ_EXTERNAL_STORAGE
+            ])
+            print("✅ Permissões Android solicitadas (HomeView)")
+        
         self._build_ui()
     
     def _build_ui(self):
@@ -41,7 +59,7 @@ class HomeView(Screen):
         btn_limpar = MDIconButton(
             icon="close-circle", 
             on_release=lambda x: self.controller_callback('filter_lists', "")
-)
+        )
         filtro_layout.add_widget(self.input_filtro)
         filtro_layout.add_widget(btn_limpar)
         layout.add_widget(filtro_layout)
@@ -125,8 +143,8 @@ class HomeView(Screen):
             icon="trash-can-outline", icon_color=(1, 0, 0, 1), size_hint_x=None, width=48,
             on_release=lambda x: self.controller_callback('confirm_delete_lista', lista_id)
         )
-    
-    # ✅ CORRIGIDO: Clique no CARD (não nos botões)
+
+        # ✅ CORRIGIDO: Clique no CARD (não nos botões)
         def on_card_release(instance):
             print(f"🖱️ Clicou na lista: {nome} (ID: {lista_id})")  # DEBUG
             self.controller_callback('open_lista', lista_id)
@@ -139,7 +157,6 @@ class HomeView(Screen):
         layout.add_widget(btn_pdf)
         layout.add_widget(btn_delete)
         card.add_widget(layout)
-        # card.bind(on_release=lambda x: self.controller_callback('open_lista', lista_id))
         
         card.bind(on_release=on_card_release)
         self.container_listas.add_widget(card)
